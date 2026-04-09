@@ -1,0 +1,110 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   StaySync – Dark Mode Overrides
+   Applied as a second stylesheet on top of style.css when dark mode is on.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.root {
+    -fx-background-color: #1a1a2e;
+    -fx-text-fill: #e0e0e0;
+}
+
+/* ── Cards & forms ───────────────────────────────────────────────────────── */
+.card {
+    -fx-background-color: #16213e;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.40), 12, 0, 0, 3);
+}
+
+/* ── Text fields & ComboBoxes ────────────────────────────────────────────── */
+.form-field {
+    -fx-background-color: #0f3460;
+    -fx-border-color: #6CB2B2;
+    -fx-text-fill: #ecf0f1;
+    -fx-prompt-text-fill: #7f8c8d;
+}
+
+.form-field:focused {
+    -fx-border-color: #FB9119;
+    -fx-background-color: #0d2d52;
+}
+
+.combo-box-base {
+    -fx-background-color: #0f3460;
+    -fx-border-color: #6CB2B2;
+}
+
+.combo-box-base .list-cell {
+    -fx-background-color: #0f3460;
+    -fx-text-fill: #ecf0f1;
+}
+
+/* ── TableView ───────────────────────────────────────────────────────────── */
+.styled-table {
+    -fx-background-color: #16213e;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.30), 10, 0, 0, 2);
+}
+
+.styled-table .table-row-cell {
+    -fx-background-color: #16213e;
+    -fx-border-color: transparent transparent #1a2a4a transparent;
+}
+
+.styled-table .table-row-cell:odd {
+    -fx-background-color: #1a2744;
+}
+
+.styled-table .table-row-cell:selected {
+    -fx-background-color: #0f3460;
+}
+
+.styled-table .table-row-cell:selected .text {
+    -fx-fill: #6CB2B2;
+}
+
+.styled-table .column-header-background {
+    -fx-background-color: #0f3460;
+}
+
+/* ── Labels ──────────────────────────────────────────────────────────────── */
+.label {
+    -fx-text-fill: #cfd8dc;
+}
+
+/* ── Dialog pane ─────────────────────────────────────────────────────────── */
+.dialog-pane {
+    -fx-background-color: #16213e;
+}
+
+.dialog-pane .content.label {
+    -fx-text-fill: #ecf0f1;
+}
+
+/* ── Scroll bars ─────────────────────────────────────────────────────────── */
+.scroll-bar:vertical .track {
+    -fx-background-color: #1a1a2e;
+}
+
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #6CB2B2;
+}
+
+/* ── DatePicker ──────────────────────────────────────────────────────────── */
+.date-picker .text-field {
+    -fx-background-color: #0f3460;
+    -fx-text-fill: #ecf0f1;
+    -fx-border-color: #6CB2B2;
+}
+
+/* ── List view (audit log) ───────────────────────────────────────────────── */
+.list-view {
+    -fx-background-color: #16213e;
+    -fx-border-color: #0f3460;
+}
+
+.list-cell {
+    -fx-background-color: #16213e;
+    -fx-text-fill: #bdc3c7;
+}
+
+.list-cell:odd {
+    -fx-background-color: #1a2744;
+}
