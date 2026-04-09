@@ -134,34 +134,55 @@ public class DiscountCodesView {
         TableColumn<DiscountCode, Void> actionCol = new TableColumn<>("Action");
         actionCol.setPrefWidth(130);
         actionCol.setCellFactory(col -> new TableCell<>() {
-            private final Button deactivateBtn = new Button("Deactivate");
+            private final Button actionBtn = new Button();
             {
-                deactivateBtn.setStyle(
-                    "-fx-background-color: #e74c3c; -fx-text-fill: white;" +
-                    "-fx-background-radius: 5; -fx-cursor: hand; -fx-font-size: 11px; -fx-padding: 4 10;");
-                deactivateBtn.setOnAction(e -> {
+                actionBtn.setOnAction(e -> {
                     DiscountCode dc = getTableView().getItems().get(getIndex());
-                    if (!dc.isActive()) return;
-                    Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-                    confirm.setTitle("Deactivate Code");
-                    confirm.setHeaderText(null);
-                    confirm.setContentText("Deactivate code \"" + dc.getCode() + "\"? It can no longer be used at checkout.");
-                    confirm.showAndWait().ifPresent(btn -> {
-                        if (btn == ButtonType.OK) {
-                            dc.setActive(false);
-                            DatabaseManager.deactivateDiscountCode(dc.getCode());
-                            DataStore.addAuditEntry("Deactivated discount code: " + dc.getCode());
-                            getTableView().refresh();
-                        }
-                    });
+                    if (dc.isActive()) {
+                        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                        confirm.setTitle("Deactivate Code");
+                        confirm.setHeaderText(null);
+                        confirm.setContentText("Deactivate code \"" + dc.getCode() + "\"? It can no longer be used at checkout.");
+                        confirm.showAndWait().ifPresent(btn -> {
+                            if (btn == ButtonType.OK) {
+                                dc.setActive(false);
+                                DatabaseManager.deactivateDiscountCode(dc.getCode());
+                                DataStore.addAuditEntry("Deactivated discount code: " + dc.getCode());
+                                getTableView().refresh();
+                            }
+                        });
+                    } else {
+                        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                        confirm.setTitle("Reactivate Code");
+                        confirm.setHeaderText(null);
+                        confirm.setContentText("Reactivate code \"" + dc.getCode() + "\"? It will be usable at checkout again.");
+                        confirm.showAndWait().ifPresent(btn -> {
+                            if (btn == ButtonType.OK) {
+                                dc.setActive(true);
+                                DatabaseManager.reactivateDiscountCode(dc.getCode());
+                                DataStore.addAuditEntry("Reactivated discount code: " + dc.getCode());
+                                getTableView().refresh();
+                            }
+                        });
+                    }
                 });
             }
             @Override protected void updateItem(Void v, boolean empty) {
                 super.updateItem(v, empty);
                 if (empty) { setGraphic(null); return; }
                 DiscountCode dc = getTableView().getItems().get(getIndex());
-                deactivateBtn.setDisable(!dc.isActive());
-                setGraphic(deactivateBtn);
+                if (dc.isActive()) {
+                    actionBtn.setText("Deactivate");
+                    actionBtn.setStyle(
+                        "-fx-background-color: #e74c3c; -fx-text-fill: white;" +
+                        "-fx-background-radius: 5; -fx-cursor: hand; -fx-font-size: 11px; -fx-padding: 4 10;");
+                } else {
+                    actionBtn.setText("Reactivate");
+                    actionBtn.setStyle(
+                        "-fx-background-color: #27AE60; -fx-text-fill: white;" +
+                        "-fx-background-radius: 5; -fx-cursor: hand; -fx-font-size: 11px; -fx-padding: 4 10;");
+                }
+                setGraphic(actionBtn);
             }
         });
 

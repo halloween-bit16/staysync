@@ -30,10 +30,10 @@ public class DatabaseSeeder {
         String sql = "INSERT INTO rooms (room_no, type, price, status) VALUES (?,?,?,?)";
         Object[][] rooms = {
             {"101", "Single",  1200.00, "BOOKED"},
-            {"102", "Single",  1200.00, "AVAILABLE"},
+            {"102", "Single",  1200.00, "BOOKED"},
             {"103", "Single",  1200.00, "CLEANING"},
             {"104", "Double",  2200.00, "BOOKED"},
-            {"105", "Double",  2200.00, "AVAILABLE"},
+            {"105", "Double",  2200.00, "BOOKED"},
             {"106", "Double",  2200.00, "AVAILABLE"},
             {"201", "Suite",   4500.00, "BOOKED"},
             {"202", "Suite",   4500.00, "AVAILABLE"},
@@ -63,6 +63,8 @@ public class DatabaseSeeder {
             {2,  "Priya Shah",      "8765432109", "104", "2026-04-06", "2026-04-09", 3,  6600.00,  "ACTIVE"},
             {3,  "Rohit Sharma",    "7654321098", "201", "2026-04-07", "2026-04-14", 7,  31500.00, "ACTIVE"},
             {4,  "Neha Gupta",      "6543210987", "301", "2026-04-08", "2026-04-11", 3,  20400.00, "ACTIVE"},
+            {5,  "Ishita Verma",    "9123456780", "102", "2026-04-09", "2026-04-12", 3,  3600.00,  "ACTIVE"},
+            {6,  "Anil Kumar",      "9234567801", "105", "2026-04-09", "2026-04-11", 2,  4400.00,  "ACTIVE"},
         };
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             for (Object[] b : bookings) {
@@ -92,6 +94,10 @@ public class DatabaseSeeder {
             {"Divya Reddy",   "7766554433", "202", "Suite",  "2026-03-25", "2026-04-01", 7,  31500.00, "Card",    31500.00, "2026-04-01T10:45:00"},
             {"Karan Joshi",   "6655443322", "302", "Deluxe", "2026-03-20", "2026-03-25", 5,  34000.00, "Deposit", 34000.00, "2026-03-25T12:00:00"},
             {"Meera Pillai",  "5544332211", "103", "Single", "2026-03-15", "2026-03-17", 2,  2400.00,  "Cash",    2400.00,  "2026-03-17T09:20:00"},
+            {"Rhea Malhotra", "9432108765", "106", "Double", "2026-03-12", "2026-03-15", 3,  6600.00,  "Card",    6600.00,  "2026-03-15T15:40:00"},
+            {"Aditya Menon",  "9543210987", "203", "Suite",  "2026-03-09", "2026-03-12", 3,  13500.00, "Cash",    13500.00, "2026-03-12T10:10:00"},
+            {"Pooja Arora",   "9654321098", "101", "Single", "2026-03-06", "2026-03-08", 2,  2400.00,  "Deposit", 2400.00,  "2026-03-08T12:25:00"},
+            {"Sameer Khan",   "9765432109", "302", "Deluxe", "2026-03-03", "2026-03-06", 3,  20400.00, "Card",    20400.00, "2026-03-06T17:05:00"},
         };
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             for (Object[] c : completed) {

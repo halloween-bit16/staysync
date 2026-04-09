@@ -103,7 +103,7 @@ public class CheckoutView {
         payCombo.setMaxWidth(200);
         payCombo.getStyleClass().add("form-field");
 
-        Label amtLbl = new Label("Amount Received ($):");
+        Label amtLbl = new Label("Amount Received (Rs.):");
         amtLbl.setStyle("-fx-font-size: 13px; -fx-text-fill: #34495e;");
         TextField amtField = new TextField();
         amtField.getStyleClass().add("form-field");
@@ -131,7 +131,7 @@ public class CheckoutView {
             originalTotalLbl.setVisible(false);
             if (foundBooking[0] != null) {
                 discountedTotal[0] = originalTotal[0];
-                totalLbl.setText("Total Due: $" + String.format("%.2f", originalTotal[0]));
+                totalLbl.setText("Total Due: Rs. " + String.format("%.2f", originalTotal[0]));
                 amtField.setText(String.format("%.2f", originalTotal[0]));
             }
         };
@@ -156,13 +156,13 @@ public class CheckoutView {
             double savings = originalTotal[0] * dc.getDiscountPercent() / 100.0;
             discountedTotal[0] = originalTotal[0] - savings;
 
-            originalTotalLbl.setText("Original: $" + String.format("%.2f", originalTotal[0]));
+            originalTotalLbl.setText("Original: Rs. " + String.format("%.2f", originalTotal[0]));
             originalTotalLbl.setVisible(true);
             discountLineLbl.setText("Discount (" + dc.getCode() + " – " +
-                    String.format("%.0f", dc.getDiscountPercent()) + "% off): -$" +
+                    String.format("%.0f", dc.getDiscountPercent()) + "% off): -Rs. " +
                     String.format("%.2f", savings));
             discountLineLbl.setVisible(true);
-            totalLbl.setText("Total Due: $" + String.format("%.2f", discountedTotal[0]));
+            totalLbl.setText("Total Due: Rs. " + String.format("%.2f", discountedTotal[0]));
             amtField.setText(String.format("%.2f", discountedTotal[0]));
             discountMsgLbl.setText("✔ Applied!");
             discountMsgLbl.setStyle("-fx-font-size: 12px; -fx-text-fill: #27AE60;");
@@ -200,7 +200,7 @@ public class CheckoutView {
             originalTotalLbl.setVisible(false);
             discountLineLbl.setVisible(false);
             discountLineLbl.setText("");
-            totalLbl.setText("Total Due: $" + String.format("%.2f", b.getTotalPrice()));
+            totalLbl.setText("Total Due: Rs. " + String.format("%.2f", b.getTotalPrice()));
             amtField.setText(String.format("%.2f", b.getTotalPrice()));
             refreshDiscounts.run();
             discountCombo.setValue(null);
@@ -249,7 +249,7 @@ public class CheckoutView {
 
             String auditMsg = "Checked out Room " + b.getRoom().getRoomNo()
                     + " - " + b.getCustomer().getName()
-                    + " | Paid: $" + String.format("%.2f", amtPaid) + " via " + payMethod;
+                    + " | Paid: Rs. " + String.format("%.2f", amtPaid) + " via " + payMethod;
             if (hasDiscount) auditMsg += " | Discount: " + appliedCode;
             DataStore.addAuditEntry(auditMsg);
 
@@ -286,7 +286,7 @@ public class CheckoutView {
         nightsCol.setCellValueFactory(cd -> new ReadOnlyStringWrapper(String.valueOf(cd.getValue().getNights())));
         TableColumn<Booking, String> totalCol = new TableColumn<>("Total Due");
         totalCol.setCellValueFactory(cd -> new ReadOnlyStringWrapper(
-                String.format("$%.2f", cd.getValue().getTotalPrice())));
+                String.format("Rs. %.2f", cd.getValue().getTotalPrice())));
 
         refTable.getColumns().add(custCol);
         refTable.getColumns().add(phoneCol);
@@ -310,10 +310,10 @@ public class CheckoutView {
         content.append("Guest: ").append(b.getCustomer().getName()).append("\n");
         content.append("Room: ").append(b.getRoom().getRoomNo()).append("\n");
         if (discountCode != null && savings > 0) {
-            content.append("Discount (").append(discountCode).append("): -$")
+            content.append("Discount (").append(discountCode).append("): -Rs. ")
                    .append(String.format("%.2f", savings)).append("\n");
         }
-        content.append("Paid: $").append(String.format("%.2f", amtPaid))
+        content.append("Paid: Rs. ").append(String.format("%.2f", amtPaid))
                .append(" via ").append(payMethod).append("\n");
         content.append("Room is now marked for Cleaning.\n\n");
         content.append(billFile != null

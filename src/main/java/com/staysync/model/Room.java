@@ -36,6 +36,6 @@ public class Room {
 
     @Override
     public String toString() {
-        return "Room " + getRoomNo() + " (" + getType() + ") – $" + getPrice();
+        return "Room " + getRoomNo() + " (" + getType() + ") – Rs. " + getPrice();
     }
 }

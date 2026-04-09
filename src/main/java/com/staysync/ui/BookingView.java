@@ -60,7 +60,7 @@ public class BookingView {
         roomCombo.setConverter(new StringConverter<>() {
             @Override public String toString(Room r) {
                 return r == null ? "" : "Room " + r.getRoomNo() + " – " + r.getType()
-                        + "  ($" + String.format("%.2f", r.getPrice()) + "/night)";
+                        + "  (Rs. " + String.format("%.2f", r.getPrice()) + "/night)";
             }
             @Override public Room fromString(String s) { return null; }
         });
@@ -95,7 +95,7 @@ public class BookingView {
             Room r = roomCombo.getValue();
             if (arr != null && dep != null && dep.isAfter(arr) && r != null) {
                 long n = ChronoUnit.DAYS.between(arr, dep);
-                summaryLbl.setText(n + " night(s)  |  Total: $"
+                summaryLbl.setText(n + " night(s)  |  Total: Rs. "
                         + String.format("%.2f", n * r.getPrice()));
             } else if (arr != null && dep != null && !dep.isAfter(arr)) {
                 summaryLbl.setText("⚠ Departure must be after arrival");
@@ -144,7 +144,7 @@ public class BookingView {
             DataStore.getBookings().add(booking);
             DatabaseManager.saveBooking(booking);
             DataStore.addAuditEntry("Booked Room " + room.getRoomNo() + " for " + name
-                    + " (" + nights + " nights, $" + String.format("%.2f", total) + ")");
+                    + " (" + nights + " nights, Rs. " + String.format("%.2f", total) + ")");
 
             nameField.clear(); phoneField.clear();
             roomCombo.setValue(null); refreshRoomCombo(roomCombo);
@@ -152,7 +152,7 @@ public class BookingView {
             departurePicker.setValue(LocalDate.now().plusDays(1));
             alert(Alert.AlertType.INFORMATION, "Booking Confirmed",
                     "Room " + room.getRoomNo() + " booked for " + name
-                    + "\n" + nights + " nights  >>  Total: $" + String.format("%.2f", total));
+                    + "\n" + nights + " nights  >>  Total: Rs. " + String.format("%.2f", total));
         });
 
         formCard.getChildren().addAll(formTitle, form, bookBtn);
@@ -198,7 +198,7 @@ public class BookingView {
         TableColumn<Booking, String> nightsCol = col("Nights",     70, cd ->
                 new ReadOnlyStringWrapper(String.valueOf(cd.getValue().getNights())));
         TableColumn<Booking, String> totalCol  = col("Total",      90, cd ->
-                new ReadOnlyStringWrapper(String.format("$%.2f", cd.getValue().getTotalPrice())));
+                new ReadOnlyStringWrapper(String.format("Rs. %.2f", cd.getValue().getTotalPrice())));
 
         TableColumn<Booking, Void> editCol = new TableColumn<>("Edit");
         editCol.setPrefWidth(90); editCol.setMinWidth(90);

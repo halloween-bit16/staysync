@@ -78,7 +78,7 @@ public class RoomsView {
         priceCol.setCellFactory(col -> new TableCell<>() {
             @Override protected void updateItem(Double item, boolean empty) {
                 super.updateItem(item, empty);
-                setText((empty || item == null) ? null : String.format("$%.2f", item));
+                setText((empty || item == null) ? null : String.format("Rs. %.2f", item));
             }
         });
 

@@ -80,21 +80,21 @@ public class BillGenerator {
                     ? cb.getTotalPrice() / cb.getNights()
                     : cb.getTotalPrice();
 
-            pw.printf("  Room Rate : $%.2f x %d night(s)%n", pricePerNight, cb.getNights());
-            pw.printf("  %-30s %10s%n", "Room charges:", String.format("$%.2f", cb.getTotalPrice()));
+            pw.printf("  Room Rate : Rs. %.2f x %d night(s)%n", pricePerNight, cb.getNights());
+            pw.printf("  %-30s %10s%n", "Room charges:", String.format("Rs. %.2f", cb.getTotalPrice()));
 
             pw.println(line);
-            pw.printf("  %-30s %10s%n", "TOTAL AMOUNT:", String.format("$%.2f", cb.getTotalPrice()));
+            pw.printf("  %-30s %10s%n", "TOTAL AMOUNT:", String.format("Rs. %.2f", cb.getTotalPrice()));
             pw.println(line);
 
             pw.println();
             pw.println("  PAYMENT DETAILS");
             pw.println(line);
             pw.printf("  Method    : %s%n", cb.getPaymentMethod());
-            pw.printf("  Amount Paid: $%.2f%n", cb.getAmountPaid());
+            pw.printf("  Amount Paid: Rs. %.2f%n", cb.getAmountPaid());
             double change = cb.getAmountPaid() - cb.getTotalPrice();
             if (change > 0) {
-                pw.printf("  Change    : $%.2f%n", change);
+                pw.printf("  Change    : Rs. %.2f%n", change);
             }
             pw.printf("  Status    : %s%n", cb.getAmountPaid() >= cb.getTotalPrice() ? "PAID" : "PARTIAL");
 

@@ -63,7 +63,7 @@ public class GuestHistoryView {
 
         TableColumn<CompletedBooking, String> paidCol = new TableColumn<>("Amount Paid");
         paidCol.setCellValueFactory(cd -> new ReadOnlyStringWrapper(
-                String.format("$%.2f", cd.getValue().getAmountPaid())));
+                String.format("Rs. %.2f", cd.getValue().getAmountPaid())));
 
         table.getColumns().add(nameCol);
         table.getColumns().add(roomCol);
@@ -89,7 +89,7 @@ public class GuestHistoryView {
             double total = results.stream().mapToDouble(CompletedBooking::getAmountPaid).sum();
             summaryLbl.setText(results.isEmpty()
                     ? "No history found for: " + phone
-                    : results.size() + " stay(s) found  |  Total Spent: $" + String.format("%.2f", total));
+                    : results.size() + " stay(s) found  |  Total Spent: Rs. " + String.format("%.2f", total));
         };
 
         searchBtn.setOnAction(e -> doSearch.run());

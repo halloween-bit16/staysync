@@ -46,7 +46,7 @@ public class ReportsView {
 
         HBox statRow = new HBox(16);
         statRow.getChildren().addAll(
-            infoCard("💰 Total Revenue",    String.format("$%.2f", totalRevenue), "#27AE60"),
+            infoCard("💰 Total Revenue",    String.format("Rs. %.2f", totalRevenue), "#27AE60"),
             infoCard("📊 Occupancy Rate",   String.format("%.1f%%", occRate),     "#6CB2B2"),
             infoCard("🚪 Total Checkouts",  String.valueOf(totalCheckouts),        "#FB9119"),
             infoCard("🛏️ Booked/Total",     bookedRooms + " / " + totalRooms,     "#8e44ad")
@@ -132,7 +132,7 @@ public class ReportsView {
             fill.prefWidthProperty().bind(bar.widthProperty().multiply(pct));
             bar.getChildren().add(fill);
 
-            Label valLbl = new Label(String.format("$%.2f", value));
+            Label valLbl = new Label(String.format("Rs. %.2f", value));
             valLbl.setStyle("-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: " + color + ";");
             valLbl.setMinWidth(80);
             valLbl.setAlignment(Pos.CENTER_RIGHT);

@@ -42,7 +42,7 @@ public class EditBookingDialog extends Dialog<Void> {
         roomCombo.setConverter(new StringConverter<>() {
             @Override public String toString(Room r) {
                 return r == null ? "" : "Room " + r.getRoomNo() + " – " + r.getType()
-                        + "  ($" + String.format("%.2f", r.getPrice()) + "/night)";
+                        + "  (Rs. " + String.format("%.2f", r.getPrice()) + "/night)";
             }
             @Override public Room fromString(String s) { return null; }
         });

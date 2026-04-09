@@ -25,8 +25,7 @@ public class DashboardView {
         long occupied  = DataStore.getRooms().stream().filter(r -> r.getStatus() == com.staysync.model.RoomStatus.BOOKED).count();
         long cleaning  = DataStore.getRooms().stream().filter(r -> r.getStatus() == com.staysync.model.RoomStatus.CLEANING).count();
         long maint     = DataStore.getRooms().stream().filter(r -> r.getStatus() == com.staysync.model.RoomStatus.MAINTENANCE).count();
-        double revenue = DataStore.getCompletedBookings().stream()
-                .mapToDouble(cb -> cb.getAmountPaid()).sum();
+        double revenue = 0.0;
 
         FlowPane cards = new FlowPane(20, 20);
         cards.getChildren().addAll(
@@ -34,7 +33,7 @@ public class DashboardView {
             card("\ud83d\udccb Occupied",    String.valueOf(occupied),  "#FB9119", "Currently occupied"),
             card("\u2728 Cleaning",          String.valueOf(cleaning),  "#f39c12", "Awaiting housekeeping"),
             card("\u26a0 Maintenance",       String.valueOf(maint),     "#e74c3c", "Under repair"),
-            card("\ud83d\udcb0 Revenue",     String.format("$%.2f", revenue), "#27AE60", "Completed checkouts")
+            card("\ud83d\udcb0 Revenue",     String.format("Rs. %.2f", revenue), "#27AE60", "Completed checkouts")
         );
 
         Label tableTitle = new Label("Recent Bookings");
@@ -54,7 +53,7 @@ public class DashboardView {
         nightsCol.setCellValueFactory(cd -> new ReadOnlyStringWrapper(String.valueOf(cd.getValue().getNights())));
         TableColumn<Booking, String> totalCol = new TableColumn<>("Total");
         totalCol.setCellValueFactory(cd -> new ReadOnlyStringWrapper(
-                String.format("$%.2f", cd.getValue().getTotalPrice())));
+                String.format("Rs. %.2f", cd.getValue().getTotalPrice())));
 
         table.getColumns().add(custCol);
         table.getColumns().add(phoneCol);

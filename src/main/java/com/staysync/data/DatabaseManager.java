@@ -286,6 +286,11 @@ public class DatabaseManager {
                 ps -> ps.setString(1, code));
     }
 
+    public static synchronized void reactivateDiscountCode(String code) {
+        exec("UPDATE discount_codes SET active = 1 WHERE code = ?",
+                ps -> ps.setString(1, code));
+    }
+
     public static synchronized void saveSetting(String key, String value) {
         exec("INSERT OR REPLACE INTO settings (key, value) VALUES (?,?)",
                 ps -> { ps.setString(1, key); ps.setString(2, value); });
