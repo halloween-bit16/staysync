@@ -25,7 +25,9 @@ public class DashboardView {
         long occupied  = DataStore.getRooms().stream().filter(r -> r.getStatus() == com.staysync.model.RoomStatus.BOOKED).count();
         long cleaning  = DataStore.getRooms().stream().filter(r -> r.getStatus() == com.staysync.model.RoomStatus.CLEANING).count();
         long maint     = DataStore.getRooms().stream().filter(r -> r.getStatus() == com.staysync.model.RoomStatus.MAINTENANCE).count();
-        double revenue = 0.0;
+        double revenue = DataStore.getCompletedBookings().stream()
+                .mapToDouble(cb -> cb.getAmountPaid())
+                .sum();
 
         FlowPane cards = new FlowPane(20, 20);
         cards.getChildren().addAll(
