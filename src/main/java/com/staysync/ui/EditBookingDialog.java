@@ -107,12 +107,6 @@ public class EditBookingDialog extends Dialog<Void> {
             double total  = nights * newRoom.getPrice();
 
             Room oldRoom = booking.getRoom();
-            if (!newRoom.getRoomNo().equals(oldRoom.getRoomNo())) {
-                oldRoom.setStatus(RoomStatus.CLEANING);
-                newRoom.setStatus(RoomStatus.BOOKED);
-                com.staysync.data.DatabaseManager.updateRoomStatus(oldRoom.getRoomNo(), RoomStatus.CLEANING);
-                com.staysync.data.DatabaseManager.updateRoomStatus(newRoom.getRoomNo(), RoomStatus.BOOKED);
-            }
 
             booking.getCustomer().setName(name);
             booking.getCustomer().setPhone(phone);
@@ -123,7 +117,19 @@ public class EditBookingDialog extends Dialog<Void> {
             booking.setNights(nights);
             booking.setTotalPrice(total);
 
-            com.staysync.data.DatabaseManager.saveBooking(booking);
+            boolean saved = com.staysync.data.DatabaseManager.saveBooking(booking);
+            if (!saved) {
+                com.staysync.data.DatabaseManager.loadAll();
+                new Alert(Alert.AlertType.ERROR,
+                        "Could not save changes. The selected room may already be booked in another window.").showAndWait();
+                return null;
+            }
+            if (!newRoom.getRoomNo().equals(oldRoom.getRoomNo())) {
+                oldRoom.setStatus(RoomStatus.CLEANING);
+                newRoom.setStatus(RoomStatus.BOOKED);
+                com.staysync.data.DatabaseManager.updateRoomStatus(oldRoom.getRoomNo(), RoomStatus.CLEANING);
+                com.staysync.data.DatabaseManager.updateRoomStatus(newRoom.getRoomNo(), RoomStatus.BOOKED);
+            }
             DataStore.addAuditEntry("Edited booking #" + booking.getId()
                     + " – Guest: " + name + ", Room: " + newRoom.getRoomNo());
 

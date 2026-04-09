@@ -78,6 +78,21 @@ public class DatabaseManager {
                     discount_percent REAL NOT NULL,
                     active           INTEGER NOT NULL DEFAULT 1
                 )""");
+            // Keep only the latest active booking per room before adding unique constraint.
+            s.executeUpdate("""
+                DELETE FROM bookings
+                WHERE booking_status = 'ACTIVE'
+                  AND id NOT IN (
+                    SELECT MAX(id)
+                    FROM bookings
+                    WHERE booking_status = 'ACTIVE'
+                    GROUP BY room_no
+                  )""");
+            s.executeUpdate("""
+                CREATE UNIQUE INDEX IF NOT EXISTS ux_active_booking_room
+                ON bookings(room_no)
+                WHERE booking_status = 'ACTIVE'
+                """);
         }
     }
 
@@ -218,23 +233,39 @@ public class DatabaseManager {
         CsvManager.saveRoomsCsv();
     }
 
-    public static synchronized void saveBooking(Booking b) {
-        exec("""
-             INSERT OR REPLACE INTO bookings
+    public static synchronized boolean saveBooking(Booking b) {
+        String sql = """
+             INSERT INTO bookings
              (id,customer_name,customer_phone,room_no,check_in_date,check_out_date,nights,total_price,booking_status)
-             VALUES (?,?,?,?,?,?,?,?,?)""",
-                ps -> {
-                    ps.setInt(1, b.getId());
-                    ps.setString(2, b.getCustomer().getName());
-                    ps.setString(3, b.getCustomer().getPhone());
-                    ps.setString(4, b.getRoom().getRoomNo());
-                    ps.setString(5, b.getCheckInDate()  != null ? b.getCheckInDate().toString()  : null);
-                    ps.setString(6, b.getCheckOutDate() != null ? b.getCheckOutDate().toString() : null);
-                    ps.setInt(7, b.getNights());
-                    ps.setDouble(8, b.getTotalPrice());
-                    ps.setString(9, b.getStatus());
-                });
-        CsvManager.appendBookingCsv(b);
+             VALUES (?,?,?,?,?,?,?,?,?)
+             ON CONFLICT(id) DO UPDATE SET
+               customer_name = excluded.customer_name,
+               customer_phone = excluded.customer_phone,
+               room_no = excluded.room_no,
+               check_in_date = excluded.check_in_date,
+               check_out_date = excluded.check_out_date,
+               nights = excluded.nights,
+               total_price = excluded.total_price,
+               booking_status = excluded.booking_status
+             """;
+        try (Connection conn = connect();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, b.getId());
+            ps.setString(2, b.getCustomer().getName());
+            ps.setString(3, b.getCustomer().getPhone());
+            ps.setString(4, b.getRoom().getRoomNo());
+            ps.setString(5, b.getCheckInDate()  != null ? b.getCheckInDate().toString()  : null);
+            ps.setString(6, b.getCheckOutDate() != null ? b.getCheckOutDate().toString() : null);
+            ps.setInt(7, b.getNights());
+            ps.setDouble(8, b.getTotalPrice());
+            ps.setString(9, b.getStatus());
+            ps.executeUpdate();
+            CsvManager.appendBookingCsv(b);
+            return true;
+        } catch (SQLException e) {
+            System.err.println("[DB] saveBooking conflict/error: " + e.getMessage());
+            return false;
+        }
     }
 
     public static synchronized void deleteBooking(int id) {

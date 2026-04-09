@@ -1,6 +1,9 @@
 package com.staysync.ui;
 
 import com.staysync.data.DataStore;
+import com.staysync.data.DatabaseManager;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
@@ -9,12 +12,14 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.layout.*;
+import javafx.util.Duration;
 
 public class MainController {
 
     private final BorderPane root;
     private final StackPane  contentArea;
     private Button           activeButton = null;
+    private final Timeline   autoRefreshTimeline;
 
     public MainController() {
         root = new BorderPane();
@@ -24,6 +29,11 @@ public class MainController {
         root.setLeft(buildSidebar());
         root.setCenter(contentArea);
         showDashboard();
+        autoRefreshTimeline = new Timeline(
+                new KeyFrame(Duration.seconds(2), e -> DatabaseManager.loadAll())
+        );
+        autoRefreshTimeline.setCycleCount(Timeline.INDEFINITE);
+        autoRefreshTimeline.play();
     }
 
     private VBox buildSidebar() {
@@ -106,6 +116,7 @@ public class MainController {
             confirm.setContentText("Are you sure you want to logout?");
             confirm.showAndWait().ifPresent(btn -> {
                 if (btn == ButtonType.OK) {
+                    autoRefreshTimeline.stop();
                     DataStore.setCurrentUserRole("RECEPTIONIST");
                     DataStore.addAuditEntry("Logged out");
 

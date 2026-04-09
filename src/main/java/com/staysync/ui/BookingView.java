@@ -137,12 +137,18 @@ public class BookingView {
 
             Customer customer = new Customer(name, phone, room.getRoomNo());
             Booking  booking  = new Booking(customer, room, arr, dep, nights, total);
-
+            boolean saved = DatabaseManager.saveBooking(booking);
+            if (!saved) {
+                DatabaseManager.loadAll();
+                refreshRoomCombo(roomCombo);
+                alert(Alert.AlertType.ERROR, "Room Unavailable",
+                        "This room was booked from another window. Please choose another room.");
+                return;
+            }
             room.setStatus(RoomStatus.BOOKED);
             DatabaseManager.updateRoomStatus(room.getRoomNo(), RoomStatus.BOOKED);
             DataStore.getCustomers().add(customer);
             DataStore.getBookings().add(booking);
-            DatabaseManager.saveBooking(booking);
             DataStore.addAuditEntry("Booked Room " + room.getRoomNo() + " for " + name
                     + " (" + nights + " nights, Rs. " + String.format("%.2f", total) + ")");
 
